@@ -1,0 +1,72 @@
+Practical - 8
+K-Means Clustering
+K-Means Clustering
+● 1. Apply the K-Mean algorithm to group similar data points into
+clusters.
+● 2. Determine the optimal number of clusters using elbow method or
+silhouette analysis.
+● 3. Visualize the clustering results and analyze the cluster
+characteristics.
+
+
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn import datasets
+from sklearn.metrics import silhouette_score
+import numpy as np
+
+data = datasets.load_iris()
+X = data.data
+
+k_values = range(2, 11)
+wcss = []
+
+for k in k_values:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(X)
+    wcss.append(kmeans.inertia_)
+
+plt.figure(figsize=(10, 6))
+plt.plot(k_values, wcss, marker="o", linestyle="-", color="b")
+plt.xlabel("Number of Clusters (K)")
+plt.ylabel("Within-Cluster Sum of Squares (WCSS)")
+plt.title("Elbow Method for Optimal K")
+plt.xticks(np.arange(min(k_values), max(k_values) + 1, 1.0))
+plt.grid(True)
+plt.show()
+
+optimal_k = 3
+kmeans = KMeans(n_clusters=optimal_k, random_state=42)
+kmeans.fit(X)
+labels = kmeans.labels_
+
+plt.figure(figsize=(10, 6))
+for i in range(optimal_k):
+    cluster_data = X[labels == i]
+    plt.scatter(
+        cluster_data[:, 0], cluster_data[:, 1], label="Cluster {}".format(i + 1)
+    )
+
+plt.scatter(
+    kmeans.cluster_centers_[:, 0],
+    kmeans.cluster_centers_[:, 1],
+    marker="*",
+    s=300,
+    c="black",
+    label="Centroids",
+)
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.title("K-Means Clustering (Optimal K = {})".format(optimal_k))
+plt.legend()
+plt.show()
+
+for i in range(optimal_k):
+    cluster_data = X[labels == i]
+    centroid = kmeans.cluster_centers_[i]
+    num_data_points = len(cluster_data)
+    print(
+        "Cluster {} - Centroid: {}, Number of Data Points: {}".format(
+            i + 1, centroid, num_data_points
+        )
+    )

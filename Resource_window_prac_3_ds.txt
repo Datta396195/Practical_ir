@@ -1,0 +1,32 @@
+Practical - 3
+
+Feature Scaling and Dummification
+● 1. Apply Feature-scaling techniques like standardization and
+normalization to numerical features.
+● 2. Perform feature dummification to convert categorical variables into
+numerical representations.
+
+
+
+import pandas as pd
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+
+data = pd.read_csv("iris_Dataset.csv")
+
+numerical_features = data.select_dtypes(include=["int", "float"]).columns
+
+scaler = StandardScaler()
+data[numerical_features] = scaler.fit_transform(data[numerical_features])
+
+min_max_scaler = MinMaxScaler()
+data[numerical_features] = min_max_scaler.fit_transform(data[numerical_features])
+
+print("Scaled Numerical Features:")
+print(data[numerical_features].head())
+
+categorical_features = data.select_dtypes(include=["object"]).columns
+
+data = pd.get_dummies(data, columns=categorical_features)
+
+print("\nDummified Categorical Features:")
+print(data.head())

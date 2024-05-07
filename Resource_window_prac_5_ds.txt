@@ -1,0 +1,37 @@
+Practical - 5 
+ANNOVA
+
+ANOVA (Analysis of Variance)
+● Perform one-way ANOVA to compare means across multiple groups
+● Conduct post-hoc tests to identify significant differences between the
+group means.
+
+
+
+import numpy as np
+import pandas as pd
+from scipy import stats
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+np.random.seed(42)
+group_a = np.random.normal(80, 5, 30)
+group_b = np.random.normal(85, 5, 30)
+group_c = np.random.normal(90, 5, 30)
+
+data = pd.DataFrame(
+{
+"Group": ["A"] * 30 + ["B"] * 30 + ["C"] * 30,
+"Score": np.concatenate([group_a, group_b, group_c]),
+}
+)
+
+anova_result = stats.f_oneway(group_a, group_b, group_c)
+
+print("One-way ANOVA results:")
+print("F-statistic:", anova_result.statistic)
+print("P-value:", anova_result.pvalue)
+
+posthoc = pairwise_tukeyhsd(data["Score"], data["Group"])
+
+print("\nTukey's HSD post-hoc test results:")
+print(posthoc)

@@ -1,0 +1,32 @@
+Practical - 4
+Hypothesis Testing
+● Formulate null and alternative hypotheses for a given problem.
+● Conduct a hypothesis test using appropriate statistical tests
+(e.g., t-test, chi square test).
+● Interpret the results and draw conclusions based on the test
+outcomes.
+
+
+
+import numpy as np
+import pandas as pd
+from scipy import stats
+
+excel_file_path = r'D:\DS PRACTICAL\SCORE.xlsx'
+
+data = pd.read_excel(excel_file_path)
+
+group_a_scores = data['GroupA']
+group_b_scores = data['GroupB']
+
+alpha = 0.05
+
+t_statistic, p_value = stats.ttest_ind(group_a_scores, group_b_scores)
+
+if p_value <= alpha:
+    print("Reject the null hypothesis. There is a significant difference.")
+else:
+    print("Fail to reject the null hypothesis. No significant difference.")
+
+print("T-statistic:", t_statistic)
+print("P-value:", p_value)
