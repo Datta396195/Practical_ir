@@ -1,0 +1,19 @@
+Learn to Rank
+1. Implement a learning to rank algorithm eg. RankSVM or RankBoost
+2. Train the ranking model using labeled data and evaluate its effectiveness.
+
+from sklearn.datasets import make_regression
+from sklearn.ensemble import AdaBoostRegressor
+from sklearn.metrics import mean_squared_error
+
+# Generate synthetic training data
+X, y = make_regression(n_samples=1000, n_features=10, noise=0.1, random_state=42)
+
+# Train AdaBoost model
+rank_boost_model = AdaBoostRegressor(n_estimators=100, random_state=42)
+rank_boost_model.fit(X, y)
+
+# Evaluate the model
+y_pred = rank_boost_model.predict(X)
+mse = mean_squared_error(y, y_pred)
+print("Mean Squared Error:", mse)

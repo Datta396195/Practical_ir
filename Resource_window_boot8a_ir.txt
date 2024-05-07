@@ -1,0 +1,46 @@
+Link Analysis and PageRank
+1. Implement the pageRank Algorithm to rank web pages based on link analysis
+2. Apply the pageRank algorithm to a small web graph and analyze the results.
+
+
+import networkx as nx
+import matplotlib.pyplot as plt
+
+class PageRank:
+    def __init__(self, damping=0.85, max_iter=100, tol=1e-6):
+        self.damping = damping
+        self.max_iter = max_iter
+        self.tol = tol
+
+    def calculate(self, graph):
+        pagerank = {node: 1.0 / len(graph) for node in graph.nodes()}
+        for _ in range(self.max_iter):
+            diff = 0
+            new_pagerank = {node: (1 - self.damping) / len(graph) for node in graph.nodes()}
+            for node in graph.nodes():
+                for neighbor in graph.neighbors(node):
+                    new_pagerank[node] += self.damping * pagerank[neighbor] / graph.out_degree(neighbor)
+                diff += abs(new_pagerank[node] - pagerank[node])
+            if diff < self.tol:
+                break
+            pagerank = new_pagerank
+        return pagerank
+
+    def analyze(self, pagerank_scores):
+        highest_score = max(pagerank_scores.values())
+        highest_nodes = [node for node, score in pagerank_scores.items() if score == highest_score]
+        print("PageRank Analysis:")
+        print(f"Highest PageRank Score: {highest_score:.4f}")
+        print("Nodes with the highest PageRank Score:", highest_nodes)
+
+web_graph = nx.DiGraph()
+web_graph.add_edges_from([("A", "B"), ("A", "C"), ("B", "C"), ("C", "A")])
+
+pagerank = PageRank()
+scores = pagerank.calculate(web_graph)
+
+print("PageRank Scores:")
+for node, score in sorted(scores.items(), key=lambda x: x[1], reverse=True):
+    print(f"Node: {node}, Score: {score:.4f}")
+
+pagerank.analyze(scores)

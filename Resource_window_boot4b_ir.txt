@@ -1,0 +1,36 @@
+Evaluation Metrics for IR System
+1. Calculate precision, recall and F measure for a given set of retrieval results.
+2. Use an evaluation toolkit to measure average precision and other evaluation
+metrics.
+
+To calculate precision, recall, and F-measure, you need to know the following:
+● True Positives (TP): Number of relevant documents retrieved
+● False Positives (FP): Number of irrelevant documents retrieved
+● False Negatives (FN): Number of relevant documents not retrieved
+Then, you can use the following formulas:
+● Precision = TP / (TP + FP)
+● Recall = TP / (TP + FN)
+● F-measure = 2 * (Precision * Recall) / (Precision + Recall)
+
+
+
+
+from sklearn.metrics import precision_score, recall_score, f1_score, average_precision_score
+
+relevant_docs = [1, 2, 3, 4, 5]
+retrieved_docs = [1, 3, 5, 6, 7]
+
+# Convert the lists into binary arrays indicating relevance
+y_true = [1 if doc in relevant_docs else 0 for doc in retrieved_docs]
+y_scores = [1 if doc in retrieved_docs else 0 for doc in retrieved_docs]
+
+# Calculate metrics using scikit-learn
+precision_sklearn = precision_score(y_true, y_scores)
+recall_sklearn = recall_score(y_true, y_scores)
+f_measure_sklearn = f1_score(y_true, y_scores)
+average_precision = average_precision_score(y_true, y_scores)
+
+print("Precision (scikit-learn):", precision_sklearn)
+print("Recall (scikit-learn):", recall_sklearn)
+print("F-measure (scikit-learn):", f_measure_sklearn)
+print("Average Precision (scikit-learn):", average_precision)

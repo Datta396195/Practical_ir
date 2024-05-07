@@ -1,0 +1,36 @@
+B) TF-IDF:
+TF-IDF measures a term's importance in a document relative to a document collection. It
+combines Term Frequency (TF) and Inverse Document Frequency (IDF), where IDF reflects the
+proportion of documents containing a term. TF-IDF = TF * IDF.
+Term Frequency (TF): TF of a term or word is the number of times the
+term appears in a document compared to the total number of words in
+the document.
+
+
+
+
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+import nltk
+nltk.download("stopwords")
+stopWords = nltk.corpus.stopwords.words("english")
+
+train_set = ["The sky is blue.", "The sun is bright."]
+test_set = ["The sun in the sky is bright."]
+
+vectorizer = CountVectorizer(stop_words=stopWords)
+transformer = TfidfTransformer()
+
+train_vectors = vectorizer.fit_transform(train_set).toarray()
+test_vectors = vectorizer.transform(test_set).toarray()
+
+print("Train vectors:", train_vectors)
+print("Test vectors:", test_vectors)
+
+cosine_sim = lambda a, b: round(a.dot(b) / (a.dot(a) ** 0.5 * b.dot(b) ** 0.5), 3)
+
+for train_vec in train_vectors:
+    for test_vec in test_vectors:
+        print("Cosine similarity:", cosine_sim(train_vec, test_vec))
+
+print("TF-IDF train vectors:", transformer.fit_transform(train_vectors).toarray())
+print("TF-IDF test vectors:", transformer.fit_transform(test_vectors).todense())

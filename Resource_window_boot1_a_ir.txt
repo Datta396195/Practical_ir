@@ -1,0 +1,86 @@
+Aim: Document Indexing and Retrieval
+● Implement an inverted index construction algorithm.
+● Build a simple document retrieval system using the constructed
+index.
+
+
+import nltk
+from nltk.corpus import stopwords
+
+# Define the documents
+document1 = "The quick brown fox jumped over the lazy dog"
+document2 = "The lazy dog slept in the sun"
+
+# Get stopwords
+nltk.download("stopwords")
+stop_words = set(stopwords.words("english"))
+
+# Tokenize and remove stopwords
+tokens1 = [word for word in document1.lower().split() if word not in stop_words]
+tokens2 = [word for word in document2.lower().split() if word not in stop_words]
+
+# Create inverted index
+inverted_index = {}
+for word in set(tokens1 + tokens2):
+    inverted_index[word] = [f"Document 1 ({tokens1.count(word)})", f"Document 2 ({tokens2.count(word)})"]
+
+# Print inverted index
+for word, docs in inverted_index.items():
+    print(f"{word} -> {', '.join(doc for doc in docs if doc[-1] != '(0)')}")
+
+# Document retrieval
+def retrieve_documents(query, inverted_index):
+    query_terms = query.lower().split()
+    result_docs = set()
+    for term in query_terms:
+        if term in inverted_index:
+            result_docs.update(inverted_index[term])
+    return list(result_docs)
+
+# Example usage
+query = "lazy dog"
+search_results = retrieve_documents(query, inverted_index)
+
+
+
+                          import nltk
+from nltk.corpus import stopwords
+
+# Define the documents
+document1 = "The quick brown fox jumped over the lazy dog"
+document2 = "The lazy dog slept in the sun"
+
+# Get stopwords
+nltk.download("stopwords")
+stop_words = set(stopwords.words("english"))
+
+# Tokenize and remove stopwords
+tokens1 = [word for word in document1.lower().split() if word not in stop_words]
+tokens2 = [word for word in document2.lower().split() if word not in stop_words]
+
+# Create inverted index
+inverted_index = {}
+for word in set(tokens1 + tokens2):
+    inverted_index[word] = [f"Document 1 ({tokens1.count(word)})", f"Document 2 ({tokens2.count(word)})"]
+
+# Print inverted index
+for word, docs in inverted_index.items():
+    print(f"{word} -> {', '.join(doc for doc in docs if doc[-1] != '(0)')}")
+
+# Document retrieval
+def retrieve_documents(query, inverted_index):
+    query_terms = query.lower().split()
+    result_docs = set()
+    for term in query_terms:
+        if term in inverted_index:
+            result_docs.update(inverted_index[term])
+    return list(result_docs)
+
+# Example usage
+query = "lazy dog"
+search_results = retrieve_documents(query, inverted_index)
+print(f"Search results for '{query}': {', '.join(search_results)}")
+
+
+                          
+

@@ -1,0 +1,35 @@
+Spelling Correction in IR Systems
+1. Develop a spelling correction module using edit distance algorithms
+2. Integrate the spelling correction module into an information retrieval system.
+
+
+
+
+def edit_distance(word1, word2):
+    dp = [[i + j if i * j == 0 else 0 for j in range(len(word2) + 1)] for i in range(len(word1) + 1)]
+    for i in range(1, len(word1) + 1):
+        for j in range(1, len(word2) + 1):
+            dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + (word1[i - 1] != word2[j - 1]))
+    return dp[-1][-1]
+
+def correct_spelling(word, word_list):
+    return min(word_list, key=lambda x: edit_distance(word, x))
+
+word_list = ["apple", "banana", "orange", "grape", "pineapple"]
+
+# Example usage
+user_word = "appple"
+corrected_word = correct_spelling(user_word, word_list)
+print("Original word:", user_word)
+print("Corrected word:", corrected_word)
+
+def process_query(query):
+    return [correct_spelling(token, word_list) for token in query.split()]
+
+word_list = ["apple", "banana", "orange", "grape", "pineapple"]
+
+# Example usage
+user_query = "appple bananana"
+corrected_query = process_query(user_query)
+print("Original query:", user_query)
+print("Corrected query:", " ".join(corrected_query))

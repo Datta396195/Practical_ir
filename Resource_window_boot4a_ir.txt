@@ -1,0 +1,32 @@
+Evaluation Metrics for IR System
+1. Calculate precision, recall and F measure for a given set of retrieval results.
+2. Use an evaluation toolkit to measure average precision and other evaluation
+metrics.
+
+To calculate precision, recall, and F-measure, you need to know the following:
+● True Positives (TP): Number of relevant documents retrieved
+● False Positives (FP): Number of irrelevant documents retrieved
+● False Negatives (FN): Number of relevant documents not retrieved
+Then, you can use the following formulas:
+● Precision = TP / (TP + FP)
+● Recall = TP / (TP + FN)
+● F-measure = 2 * (Precision * Recall) / (Precision + Recall)
+
+
+
+
+
+def calculate_metrics(true_positives, false_positives, false_negatives):
+    precision = true_positives / (true_positives + false_positives)
+    recall = true_positives / (true_positives + false_negatives)
+    f_measure = 2 * (precision * recall) / (precision + recall)
+    return precision, recall, f_measure
+
+# Example usage
+true_positives, false_positives, false_negatives = 70, 10, 20
+precision, recall, f_measure = calculate_metrics(true_positives, false_positives, false_negatives)
+
+# Print the results
+print("Precision:", precision)
+print("Recall:", recall)
+print("F-measure:", f_measure)

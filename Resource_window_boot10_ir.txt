@@ -1,0 +1,66 @@
+Advanced Topics in IR
+1. Implement a text summarization algorithm (eg. extractive & abstractive)
+2. Build a question-Answer system using techniques such as information extraction
+
+
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+from nltk.tag import pos_tag
+from nltk.chunk import ne_chunk
+from fuzzywuzzy import fuzz
+import nltk
+
+nltk.download("punkt")
+nltk.download("averaged_perceptron_tagger")
+nltk.download("maxent_ne_chunker")
+nltk.download("words")
+nltk.download("stopwords")
+
+def extractive_summarization(text, num_sentences=3):
+    sentences = sent_tokenize(text)
+    words = [word.lower() for sentence in sentences for word in word_tokenize(sentence) if word not in stopwords.words("english")]
+    word_freq = nltk.FreqDist(words)
+    sentence_scores = {i: sum(word_freq[word] for word in word_tokenize(sentence.lower())) for i, sentence in enumerate(sentences)}
+    summary_sentences = sorted(sentence_scores, key=sentence_scores.get, reverse=True)[:num_sentences]
+    return " ".join([sentences[i] for i in summary_sentences])
+
+def answer_question(question, text):
+    sentences = sent_tokenize(text)
+    words = [word.lower() for sentence in sentences for word in word_tokenize(sentence) if word not in stopwords.words("english")]
+    entities = []
+    for sentence in sentences:
+        tagged_words = pos_tag(word_tokenize(sentence))
+        chunked = ne_chunk(tagged_words)
+        for subtree in chunked:
+            if type(subtree) == nltk.tree.Tree:
+                entities.append(" ".join([token for token, pos in subtree.leaves()]))
+    best_score = 0
+    best_answer = None
+    for sentence in sentences:
+        score = fuzz.token_set_ratio(question, sentence)
+        if score > best_score:
+            best_score = score
+            best_answer = sentence
+    return best_answer if best_score > 80 else "Sorry, I couldn't find an answer."
+
+# Read text from file
+def read_text_from_file(file_path):
+    with open(file_path, "r") as file:
+        return file.read()
+
+file_path = r"D:\IR PRACTICAL\10.txt"
+text = read_text_from_file(file_path)
+summary = extractive_summarization(text)
+print("Summary:")
+print(summary)
+
+# Answer questions
+print("\nQuestion-Answer:")
+questions = [
+    "What is Natural Language Processing?",
+    "What is the process of text summarization?",
+    "What is Question Answering?"
+]
+for question in questions:
+    answer = answer_question(question, text)
+    print(f"Question: {question}\nAnswer: {answer}\n")

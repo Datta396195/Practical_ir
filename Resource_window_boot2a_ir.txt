@@ -1,0 +1,45 @@
+Aim: Retrieval Models
+● Implement the Boolean retrieval model and process queries.
+● Implement the vector space model with TF-IDF weighting and cosine similarity.
+Theory:
+A) Boolean Retrieval Model:
+The Boolean model in Information Retrieval uses Boolean logic to represent and retrieve
+documents. Documents and queries are represented as sets of terms, with operators like AND,
+OR, and NOT combining terms to express information needs.
+
+
+
+
+docs = {1: "apple banana orange", 2: "apple banana", 3: "banana orange", 4: "apple"}
+
+def index(docs):
+    idx = {}
+    for doc, text in docs.items():
+        for word in set(text.split()):
+            idx.setdefault(word, set()).add(doc)
+    return idx
+
+def and_op(terms, idx):
+    res = set(range(1, len(docs)+1))
+    for term in terms:
+        res &= idx.get(term, set())
+    return list(res)
+
+def or_op(terms, idx):
+    res = set()
+    for term in terms:
+        res |= idx.get(term, set())
+    return list(res)
+
+def not_op(term, idx):
+    res = set(range(1, len(docs)+1)) - idx.get(term, set())
+    return list(res)
+
+idx = index(docs)
+
+q1 = ["apple", "banana"]
+q2 = ["apple", "orange"]
+
+print("AND:", and_op(q1, idx))
+print("OR:", or_op(q2, idx))
+print("NOT:", not_op("orange", idx))
