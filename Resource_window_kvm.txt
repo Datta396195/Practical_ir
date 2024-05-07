@@ -1,0 +1,26 @@
+practical KVM
+ 
+su
+
+sudo apt update
+
+sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager
+
+LC_ALL=C lscpu | grep virtualization
+
+egrep -c '(vmxlsvm)' /proc/cpuinfo
+
+groups
+
+sudo useradd -g $ USER libvirt
+
+sudo useradd -g $ USER libvirt-kvm
+
+Sudo systemctl  enable libvirtd. Service
+
+sudo systemctl start libvirtd.service
+
+virt-manager
+
+
+

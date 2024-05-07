@@ -1,0 +1,35 @@
+Open-Stack
+
+
+sudo apt update
+
+sudo apt -y dist-upgrade
+
+sudo useradd -s/bin/bash -d /opt/stkk -m stkk
+
+echo "Stkk ALL=  (ALL) NOPASSWD: ALL"  | sudo tee -a /etc/sudoers.d/stkk
+
+sudo su - stkk
+
+sudo apt install git -y
+
+git clone https://git.openstack.org/openstack-dev/devstack
+
+ls
+
+cd devstack
+
+ cd samples
+
+ls
+
+cp local.conf ../
+ls
+
+cp local.conf ../
+cd ..
+ls
+
+sudo nano local.conf
+
+./stack.sh
