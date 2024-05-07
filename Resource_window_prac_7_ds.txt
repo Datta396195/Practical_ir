@@ -1,0 +1,57 @@
+Practical - 7
+Logistic Regression and Decision Tree
+● Build a logistic regression model to predict a binary outcome.
+● Evaluate the model's performance using classification metrics (eg.
+accuracy, precision, recall)
+● Construct a decision tree model and interpret the decision rules for
+classification.
+
+
+
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    confusion_matrix,
+)
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import plot_tree
+import matplotlib.pyplot as plt
+
+data = pd.read_csv("Iris_dataset.csv")
+
+X = data.drop(columns=["Id", "Species"])
+y = data["Species"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+logreg_model = LogisticRegression()
+logreg_model.fit(X_train, y_train)
+y_pred_logreg = logreg_model.predict(X_test)
+
+accuracy_logreg = accuracy_score(y_test, y_pred_logreg) * 100
+precision_logreg = precision_score(y_test, y_pred_logreg, average="weighted") * 100
+recall_logreg = recall_score(y_test, y_pred_logreg, average="weighted") * 100
+print("Logistic Regression Model Performance:")
+print("Accuracy:", accuracy_logreg)
+print("Precision:", precision_logreg)
+print("Recall:", recall_logreg)
+
+conf_matrix_logreg = confusion_matrix(y_test, y_pred_logreg)
+print("Confusion Matrix:")
+print(conf_matrix_logreg)
+
+dt_model = DecisionTreeClassifier()
+dt_model.fit(X_train, y_train)
+
+plt.figure(figsize=(12, 8))
+plot_tree(
+    dt_model, filled=True, feature_names=X.columns, class_names=data["Species"].unique()
+)
+plt.show()
