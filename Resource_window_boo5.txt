@@ -1,0 +1,31 @@
+from sklearn.datasets import fetch_20newsgroups
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, classification_report
+
+# Loading the Dataset
+categories = ["alt.atheism", "soc.religion.christian", "comp.graphics", "sci.med"]
+train_data = fetch_20newsgroups(subset="train", categories=categories, shuffle=True, random_state=42)
+test_data = fetch_20newsgroups(subset="test", categories=categories, shuffle=True, random_state=42)
+
+# Splitting the Dataset
+X_train, X_test, y_train, y_test = train_data.data, test_data.data, train_data.target, test_data.target
+
+# Vectorizing the Text Data using TF-IDF
+tfidf_vectorizer = TfidfVectorizer(max_features=10000)
+X_train_tfidf = tfidf_vectorizer.fit_transform(X_train)
+X_test_tfidf = tfidf_vectorizer.transform(X_test)
+
+# Training the Model (Naive Bayes)
+nb_classifier = MultinomialNB()
+nb_classifier.fit(X_train_tfidf, y_train)
+
+# Evaluating the Model's Performance
+y_pred = nb_classifier.predict(X_test_tfidf)
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+# Generating a Detailed Classification Report
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred, target_names=test_data.target_names))
