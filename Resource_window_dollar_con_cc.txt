@@ -1,0 +1,16 @@
+Practical - 1
+
+Dollar Conversion
+
+using System;
+class MainClass
+{
+public static void Main(string[] args)
+{
+Console.WriteLine("Please enter dollars:");
+double dollars = Convert.ToDouble(Console.ReadLine());
+double rupees = dollars * 83;
+Console.WriteLine(rupees + " Rupees");
+Console.ReadKey();
+}
+}
